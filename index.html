@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mini Racing League</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --cyan: #00C8FF;
     --gold: #FFC800;
-    --navy: #0A0E27;
-    --navy-mid: #10163A;
-    --navy-light: #1A2050;
+    --navy: #07091A;
+    --navy-mid: #0D1128;
+    --navy-light: #141833;
     --text: #E8EEFF;
-    --muted: #7A85B0;
+    --muted: #6B75A0;
+    --border: rgba(0,200,255,0.12);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -28,36 +28,33 @@
     overflow-x: hidden;
   }
 
-  /* NAV */
+  /* ───── NAV ───── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 1rem 3rem;
-    background: rgba(10,14,39,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0,200,255,0.15);
+    background: rgba(7,9,26,0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
   }
-
   .nav-logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 1.5rem;
-    letter-spacing: 0.05em;
-    color: var(--cyan);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: 0.04em;
+    color: var(--text);
   }
-  .nav-logo span { color: var(--gold); }
-
+  .nav-logo span { color: var(--cyan); }
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a {
     color: var(--muted);
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--cyan); }
-
   .nav-cta {
     background: var(--cyan);
     color: var(--navy);
@@ -66,305 +63,353 @@
     font-size: 0.9rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 0.5rem 1.25rem;
-    border-radius: 3px;
+    padding: 0.5rem 1.4rem;
+    border-radius: 2px;
     text-decoration: none;
     transition: background 0.2s, transform 0.1s;
   }
   .nav-cta:hover { background: #33d4ff; transform: translateY(-1px); }
 
-  /* HERO */
+  /* ───── HERO ───── */
   .hero {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
     position: relative;
-    padding: 6rem 2rem 4rem;
+    display: flex;
+    align-items: flex-end;
     overflow: hidden;
   }
 
-  .hero-bg {
+  .hero-img {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1800&q=80');
+    background-size: cover;
+    background-position: center 30%;
+    transform: scale(1.04);
+    animation: heroZoom 12s ease-out forwards;
+  }
+
+  @keyframes heroZoom {
+    from { transform: scale(1.08); }
+    to { transform: scale(1.0); }
+  }
+
+  .hero-overlay {
     position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 80%, rgba(0,200,255,0.07) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(255,200,0,0.05) 0%, transparent 60%),
-      linear-gradient(180deg, var(--navy) 0%, #080B1E 100%);
+      linear-gradient(to top, rgba(7,9,26,1) 0%, rgba(7,9,26,0.75) 40%, rgba(7,9,26,0.2) 80%, rgba(7,9,26,0.1) 100%),
+      linear-gradient(to right, rgba(7,9,26,0.6) 0%, transparent 60%);
   }
 
-  .track-lines {
-    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
-  }
-
-  .track-lines::before {
-    content: '';
-    position: absolute;
-    left: 50%; top: 0; bottom: 0; width: 1px;
-    background: linear-gradient(180deg, transparent, rgba(0,200,255,0.2) 30%, rgba(0,200,255,0.1) 70%, transparent);
-    transform: translateX(-280px);
-  }
-  .track-lines::after {
-    content: '';
-    position: absolute;
-    left: 50%; top: 0; bottom: 0; width: 1px;
-    background: linear-gradient(180deg, transparent, rgba(0,200,255,0.2) 30%, rgba(0,200,255,0.1) 70%, transparent);
-    transform: translateX(280px);
+  .hero-content {
+    position: relative;
+    padding: 0 5rem 7rem;
+    max-width: 780px;
+    animation: fadeUp 1s 0.2s ease both;
   }
 
   .hero-eyebrow {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 600;
-    font-size: 0.8rem;
-    letter-spacing: 0.3em;
+    font-size: 0.78rem;
+    letter-spacing: 0.35em;
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 1.5rem;
-    position: relative;
-    animation: fadeUp 0.8s ease both;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--gold);
   }
 
   .hero-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: clamp(4rem, 12vw, 10rem);
-    line-height: 0.9;
-    letter-spacing: -0.02em;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
     text-transform: uppercase;
-    position: relative;
-    animation: fadeUp 0.8s 0.1s ease both;
+    margin-bottom: 1.75rem;
   }
-
-  .hero-title .line-cyan { color: var(--cyan); display: block; }
-  .hero-title .line-gold { color: var(--gold); display: block; }
-  .hero-title .line-white { color: var(--text); display: block; }
+  .hero-title .accent { color: var(--cyan); }
+  .hero-title .gold { color: var(--gold); }
 
   .hero-sub {
-    font-size: 1.1rem;
-    color: var(--muted);
-    max-width: 480px;
-    line-height: 1.7;
-    margin: 2rem auto 3rem;
-    position: relative;
-    animation: fadeUp 0.8s 0.2s ease both;
+    font-size: 1.05rem;
+    color: rgba(232,238,255,0.7);
+    max-width: 440px;
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
   }
 
-  .hero-actions {
-    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
-    position: relative;
-    animation: fadeUp 0.8s 0.3s ease both;
-  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
 
   .btn-primary {
     background: var(--cyan);
     color: var(--navy);
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: 0.1em;
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 0.8rem 2rem;
-    border-radius: 3px;
+    padding: 0.85rem 2.2rem;
+    border-radius: 2px;
     text-decoration: none;
     transition: transform 0.15s, box-shadow 0.15s;
+    display: inline-block;
   }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,200,255,0.3); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 35px rgba(0,200,255,0.35); }
 
   .btn-secondary {
-    border: 1px solid rgba(0,200,255,0.4);
-    color: var(--cyan);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--text);
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: 0.1em;
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 0.8rem 2rem;
-    border-radius: 3px;
+    padding: 0.85rem 2.2rem;
+    border-radius: 2px;
     text-decoration: none;
     transition: border-color 0.15s, background 0.15s;
+    display: inline-block;
   }
-  .btn-secondary:hover { border-color: var(--cyan); background: rgba(0,200,255,0.08); }
+  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(0,200,255,0.06); }
 
   .hero-scroll {
     position: absolute;
-    bottom: 2rem; left: 50%;
-    transform: translateX(-50%);
+    right: 5rem; bottom: 7rem;
     display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    color: var(--muted); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
-    animation: bounce 2s infinite;
-  }
-  .hero-scroll::after {
-    content: '';
-    display: block; width: 1px; height: 40px;
-    background: linear-gradient(to bottom, var(--muted), transparent);
+    color: var(--muted); font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    animation: bounce 2.5s infinite;
+    writing-mode: vertical-rl;
   }
 
-  /* STATS BAR */
+  /* ───── STATS BAR ───── */
   .stats-bar {
     background: var(--navy-mid);
-    border-top: 1px solid rgba(0,200,255,0.1);
-    border-bottom: 1px solid rgba(0,200,255,0.1);
-    padding: 2.5rem 3rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
   }
   .stats-grid {
-    max-width: 900px; margin: 0 auto;
+    max-width: 1100px; margin: 0 auto;
     display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1rem; text-align: center;
   }
-  .stat-item {}
+  .stat-item {
+    padding: 2rem;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
   .stat-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 3rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 2.8rem;
     color: var(--cyan); line-height: 1;
   }
   .stat-label {
-    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--muted); margin-top: 0.3rem;
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin-top: 0.4rem;
   }
 
-  /* SECTIONS */
-  section { padding: 6rem 3rem; }
+  /* ───── SECTIONS ───── */
+  section { padding: 7rem 3rem; }
   .section-inner { max-width: 1100px; margin: 0 auto; }
 
   .section-label {
     font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600; font-size: 0.75rem;
-    letter-spacing: 0.3em; text-transform: uppercase;
+    font-weight: 600; font-size: 0.72rem;
+    letter-spacing: 0.35em; text-transform: uppercase;
     color: var(--gold); margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
   }
-
+  .section-label::before {
+    content: ''; display: block;
+    width: 24px; height: 1px;
+    background: var(--gold);
+  }
   .section-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: clamp(2.5rem, 5vw, 4rem);
-    text-transform: uppercase; line-height: 1;
-    margin-bottom: 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: clamp(2.4rem, 5vw, 4rem);
+    text-transform: uppercase; line-height: 0.95;
+    margin-bottom: 1rem;
   }
 
-  /* LEAGUES */
+  /* ───── LEAGUES ───── */
   .leagues { background: var(--navy-mid); }
-
   .leagues-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem; margin-top: 3rem;
+    gap: 1.5px; margin-top: 4rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--border);
   }
-
   .league-card {
     background: var(--navy-light);
-    border: 1px solid rgba(0,200,255,0.1);
-    border-radius: 6px;
-    padding: 2rem;
+    padding: 0;
     position: relative;
     overflow: hidden;
-    transition: transform 0.2s, border-color 0.2s;
+    transition: transform 0.25s;
   }
-  .league-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(0,200,255,0.35);
-  }
-  .league-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  }
-  .league-card.tier-1::before { background: var(--gold); }
-  .league-card.tier-2::before { background: var(--cyan); }
-  .league-card.tier-3::before { background: #8A8FBB; }
+  .league-card:hover { z-index: 2; transform: scale(1.01); }
 
-  .league-tier {
-    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
-    margin-bottom: 0.5rem;
+  .league-img {
+    width: 100%; height: 200px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.7) saturate(0.8);
+    transition: filter 0.3s, transform 0.4s;
   }
-  .tier-1 .league-tier { color: var(--gold); }
-  .tier-2 .league-tier { color: var(--cyan); }
-  .tier-3 .league-tier { color: #8A8FBB; }
-
-  .league-name {
+  .league-card:hover .league-img {
+    filter: brightness(0.85) saturate(1);
+    transform: scale(1.03);
+  }
+  .league-img-wrap { overflow: hidden; position: relative; }
+  .league-tier-badge {
+    position: absolute; top: 0.75rem; left: 0.75rem;
     font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 1.8rem; text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-
-  .league-desc {
-    font-size: 0.9rem; color: var(--muted); line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  .league-meta {
-    display: flex; gap: 1rem;
-  }
-  .meta-badge {
-    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 700; font-size: 0.68rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
     padding: 0.25rem 0.6rem;
     border-radius: 2px;
-    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .tier-1 .league-tier-badge { background: var(--gold); color: #000; }
+  .tier-2 .league-tier-badge { background: var(--cyan); color: #000; }
+  .tier-3 .league-tier-badge { background: #8A8FBB; color: #000; }
+
+  .league-body {
+    padding: 1.75rem;
+    border-top: 3px solid transparent;
+  }
+  .tier-1 .league-body { border-color: var(--gold); }
+  .tier-2 .league-body { border-color: var(--cyan); }
+  .tier-3 .league-body { border-color: #8A8FBB; }
+
+  .league-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.6rem; text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .league-desc {
+    font-size: 0.88rem; color: var(--muted); line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+  .league-meta { display: flex; gap: 0.6rem; }
+  .meta-badge {
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 2px;
+    border: 1px solid rgba(255,255,255,0.12);
     color: var(--muted);
   }
 
-  /* ABOUT */
-  .about-layout {
+  /* ───── ABOUT / RACETRACK SPLIT ───── */
+  .about-split {
     display: grid; grid-template-columns: 1fr 1fr;
-    gap: 5rem; align-items: center;
+    gap: 0; margin-top: 0;
+    border-radius: 6px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .about-img-col {
+    position: relative; min-height: 500px;
+  }
+  .about-img-col img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.6) saturate(0.7);
+  }
+  .about-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, transparent 60%, var(--navy-light));
+  }
+
+  .about-text-col {
+    background: var(--navy-light);
+    padding: 3.5rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .about-text-col .section-label { margin-bottom: 0.75rem; }
+  .about-text-col .section-title { margin-bottom: 1.5rem; font-size: clamp(2rem, 4vw, 3rem); }
+  .about-text-col p { color: var(--muted); line-height: 1.8; margin-bottom: 1rem; font-size: 0.95rem; }
+
+  .features-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
     margin-top: 2rem;
   }
-
-  .about-text p {
-    color: var(--muted); line-height: 1.8; margin-bottom: 1rem;
-  }
-
-  .about-features {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
-  }
   .feature-item {
-    padding: 1.25rem;
-    background: var(--navy-mid);
-    border: 1px solid rgba(0,200,255,0.08);
-    border-radius: 4px;
+    padding: 1.2rem;
+    background: rgba(0,200,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 3px;
   }
-  .feature-icon {
-    font-size: 1.5rem; margin-bottom: 0.5rem;
-  }
+  .feature-icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
   .feature-title {
     font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700; font-size: 1rem; text-transform: uppercase;
-    color: var(--text); margin-bottom: 0.3rem;
+    font-weight: 700; font-size: 0.95rem; text-transform: uppercase;
+    color: var(--text); margin-bottom: 0.2rem;
   }
-  .feature-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .feature-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
 
-  /* SOCIALS */
+  /* ───── GALLERY STRIP ───── */
+  .gallery-strip {
+    padding: 0;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3px;
+    height: 360px;
+    overflow: hidden;
+  }
+  .gallery-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.75) saturate(0.8);
+    transition: filter 0.3s, transform 0.4s;
+    cursor: pointer;
+  }
+  .gallery-img:hover {
+    filter: brightness(1) saturate(1.1);
+    transform: scale(1.02);
+  }
+  .gallery-cell { overflow: hidden; }
+
+  /* ───── SOCIALS ───── */
   .socials { background: var(--navy-mid); }
-
   .socials-grid {
     display: grid; grid-template-columns: repeat(5, 1fr);
     gap: 1rem; margin-top: 3rem;
   }
-
   .social-card {
     display: flex; flex-direction: column; align-items: center;
     padding: 2rem 1rem;
     background: var(--navy-light);
     border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 6px;
+    border-radius: 4px;
     text-decoration: none;
-    transition: transform 0.2s, border-color 0.2s;
+    transition: transform 0.2s, border-color 0.25s, box-shadow 0.25s;
   }
-  .social-card:hover { transform: translateY(-4px); }
-
-  .social-card.discord:hover { border-color: #5865F2; }
-  .social-card.youtube:hover { border-color: #FF0000; }
-  .social-card.twitch:hover { border-color: #9146FF; }
-  .social-card.tiktok:hover { border-color: #FF004F; }
-  .social-card.instagram:hover { border-color: #E1306C; }
+  .social-card:hover { transform: translateY(-5px); }
+  .social-card.discord:hover  { border-color: #5865F2; box-shadow: 0 8px 30px rgba(88,101,242,0.15); }
+  .social-card.youtube:hover  { border-color: #FF0000; box-shadow: 0 8px 30px rgba(255,0,0,0.12); }
+  .social-card.twitch:hover   { border-color: #9146FF; box-shadow: 0 8px 30px rgba(145,70,255,0.15); }
+  .social-card.tiktok:hover   { border-color: #FF004F; box-shadow: 0 8px 30px rgba(255,0,79,0.12); }
+  .social-card.instagram:hover{ border-color: #E1306C; box-shadow: 0 8px 30px rgba(225,48,108,0.12); }
 
   .social-icon {
-    width: 48px; height: 48px; margin-bottom: 0.75rem;
-    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px; margin-bottom: 0.75rem;
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
   }
-  .social-icon svg { width: 26px; height: 26px; }
-
-  .social-card.discord .social-icon { background: rgba(88,101,242,0.15); }
-  .social-card.youtube .social-icon { background: rgba(255,0,0,0.12); }
-  .social-card.twitch .social-icon { background: rgba(145,70,255,0.15); }
-  .social-card.tiktok .social-icon { background: rgba(255,0,79,0.12); }
+  .social-icon svg { width: 28px; height: 28px; }
+  .social-card.discord   .social-icon { background: rgba(88,101,242,0.15); }
+  .social-card.youtube   .social-icon { background: rgba(255,0,0,0.12); }
+  .social-card.twitch    .social-icon { background: rgba(145,70,255,0.15); }
+  .social-card.tiktok    .social-icon { background: rgba(255,0,79,0.12); }
   .social-card.instagram .social-icon { background: rgba(225,48,108,0.12); }
 
   .social-name {
@@ -373,65 +418,82 @@
     text-transform: uppercase; letter-spacing: 0.1em;
     color: var(--text);
   }
-  .social-handle { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+  .social-handle { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
 
-  /* CTA FOOTER */
+  /* ───── CTA FOOTER ───── */
   .cta-footer {
-    text-align: center; padding: 7rem 3rem;
-    background: linear-gradient(180deg, var(--navy) 0%, #080B1E 100%);
     position: relative; overflow: hidden;
+    text-align: center; padding: 0;
+    min-height: 480px;
+    display: flex; align-items: center; justify-content: center;
   }
-  .cta-footer::before {
-    content: '';
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 600px; height: 300px;
-    background: radial-gradient(ellipse, rgba(0,200,255,0.08), transparent 70%);
-    pointer-events: none;
+  .cta-bg-img {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.3) saturate(0.5);
   }
+  .cta-overlay {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,200,255,0.08), transparent),
+      linear-gradient(180deg, var(--navy) 0%, transparent 20%, transparent 80%, var(--navy) 100%);
+  }
+  .cta-content { position: relative; z-index: 1; padding: 3rem; }
   .cta-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: clamp(3rem, 6vw, 5rem);
-    text-transform: uppercase; line-height: 1;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: clamp(2.8rem, 6vw, 5.5rem);
+    text-transform: uppercase; line-height: 0.95;
     position: relative; margin-bottom: 1.5rem;
   }
   .cta-title span { color: var(--cyan); }
   .cta-sub {
-    color: var(--muted); font-size: 1.05rem;
-    max-width: 450px; margin: 0 auto 2.5rem;
-    position: relative;
+    color: rgba(232,238,255,0.6); font-size: 1rem;
+    max-width: 420px; margin: 0 auto 2.5rem;
+    line-height: 1.7;
   }
 
-  /* FOOTER BAR */
+  /* ───── FOOTER ───── */
   footer {
-    background: #060816;
-    border-top: 1px solid rgba(0,200,255,0.1);
+    background: #04050F;
+    border-top: 1px solid var(--border);
     padding: 1.5rem 3rem;
     display: flex; align-items: center; justify-content: space-between;
-    font-size: 0.8rem; color: var(--muted);
+    font-size: 0.78rem; color: var(--muted);
   }
-  footer a { color: var(--muted); text-decoration: none; }
+  footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
   footer a:hover { color: var(--cyan); }
 
-  /* ANIMATIONS */
+  /* ───── ANIMATIONS ───── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
+    from { opacity: 0; transform: translateY(28px); }
     to { opacity: 1; transform: translateY(0); }
   }
   @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
   }
 
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
+  /* ───── RESPONSIVE ───── */
+  @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { display: none; }
-    section { padding: 4rem 1.5rem; }
+    section { padding: 4.5rem 1.5rem; }
+    .hero-content { padding: 0 1.5rem 5rem; }
+    .hero-scroll { display: none; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
     .leagues-grid { grid-template-columns: 1fr; }
-    .about-layout { grid-template-columns: 1fr; gap: 2rem; }
+    .about-split { grid-template-columns: 1fr; }
+    .about-img-col { min-height: 260px; }
     .socials-grid { grid-template-columns: repeat(3, 1fr); }
+    .gallery-strip { grid-template-columns: 1fr; height: auto; }
+    .gallery-strip .gallery-cell { height: 200px; }
+    .gallery-strip .gallery-cell:nth-child(2),
+    .gallery-strip .gallery-cell:nth-child(3) { display: none; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .features-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -439,7 +501,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">MRL <span>·</span></div>
+  <div class="nav-logo">MRL<span>.</span></div>
   <ul class="nav-links">
     <li><a href="#ligen">Ligen</a></li>
     <li><a href="#ueber">Über uns</a></li>
@@ -450,23 +512,25 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
-  <div class="track-lines"></div>
-  <div class="hero-eyebrow">Seit 2020 &mdash; F1 Sim Racing Community</div>
-  <h1 class="hero-title">
-    <span class="line-cyan">Mini</span>
-    <span class="line-gold">Racing</span>
-    <span class="line-white">League</span>
-  </h1>
-  <p class="hero-sub">Deutschlands kompetitive F1-Sim-Racing-Liga auf Discord. Meistere die Strecke, kämpfe um Punkte, schreibe Geschichte.</p>
-  <div class="hero-actions">
-    <a href="https://discord.gg/mEng68Qekb" class="btn-primary" target="_blank">Jetzt einsteigen</a>
-    <a href="https://www.youtube.com/@MiniRacingLiga" class="btn-secondary" target="_blank">Highlights ansehen</a>
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Seit 2020 — F1 Sim Racing Community</div>
+    <h1 class="hero-title">
+      <span class="gold">Mini</span><br>
+      <span class="accent">Racing</span><br>
+      League
+    </h1>
+    <p class="hero-sub">Deutschlands kompetitive F1-Sim-Racing-Liga auf Discord. Meistere die Strecke, kämpfe um Punkte, schreibe Geschichte.</p>
+    <div class="hero-actions">
+      <a href="https://discord.gg/mEng68Qekb" class="btn-primary" target="_blank">Jetzt einsteigen</a>
+      <a href="https://www.youtube.com/@MiniRacingLiga" class="btn-secondary" target="_blank">Highlights ansehen</a>
+    </div>
   </div>
-  <div class="hero-scroll">Scroll</div>
+  <div class="hero-scroll">Scroll ↓</div>
 </section>
 
-<!-- STATS -->
+<!-- STATS BAR -->
 <div class="stats-bar">
   <div class="stats-grid">
     <div class="stat-item">
@@ -496,32 +560,56 @@
     <div class="leagues-grid">
 
       <div class="league-card tier-1">
-        <div class="league-tier">Tier 1</div>
-        <div class="league-name">F1 World</div>
-        <p class="league-desc">Die Königsklasse der MRL. Hier fahren die besten Piloten der Liga gegeneinander um den Weltmeistertitel.</p>
-        <div class="league-meta">
-          <span class="meta-badge">Profi</span>
-          <span class="meta-badge">F1 Spiel</span>
+        <div class="league-img-wrap">
+          <img class="league-img"
+               src="https://images.unsplash.com/photo-1611733694024-e70c2b9fecff?w=700&q=75"
+               alt="F1 World – Königsklasse"
+               loading="lazy">
+          <div class="league-tier-badge">Tier 1</div>
+        </div>
+        <div class="league-body">
+          <div class="league-name">F1 World</div>
+          <p class="league-desc">Die Königsklasse der MRL. Hier fahren die besten Piloten der Liga gegeneinander um den Weltmeistertitel.</p>
+          <div class="league-meta">
+            <span class="meta-badge">Profi</span>
+            <span class="meta-badge">F1 Spiel</span>
+          </div>
         </div>
       </div>
 
       <div class="league-card tier-2">
-        <div class="league-tier">Tier 2</div>
-        <div class="league-name">Formel 1</div>
-        <p class="league-desc">Der Mittelbau der MRL. Kompetitiv, spannend und der ideale Einstieg in den Rennsport auf hohem Niveau.</p>
-        <div class="league-meta">
-          <span class="meta-badge">Mittel</span>
-          <span class="meta-badge">F1 Spiel</span>
+        <div class="league-img-wrap">
+          <img class="league-img"
+               src="https://images.unsplash.com/photo-1541773367-be27631dc5b6?w=700&q=75"
+               alt="Formel 1 Liga"
+               loading="lazy">
+          <div class="league-tier-badge">Tier 2</div>
+        </div>
+        <div class="league-body">
+          <div class="league-name">Formel 1</div>
+          <p class="league-desc">Der Mittelbau der MRL. Kompetitiv, spannend und der ideale Einstieg in den Rennsport auf hohem Niveau.</p>
+          <div class="league-meta">
+            <span class="meta-badge">Mittel</span>
+            <span class="meta-badge">F1 Spiel</span>
+          </div>
         </div>
       </div>
 
       <div class="league-card tier-3">
-        <div class="league-tier">Tier 3</div>
-        <div class="league-name">Formel 2</div>
-        <p class="league-desc">Der perfekte Einstieg. Lerne das Handwerk des Sim Racings in einer freundlichen, sportlichen Atmosphäre.</p>
-        <div class="league-meta">
-          <span class="meta-badge">Einsteiger</span>
-          <span class="meta-badge">F1 Spiel</span>
+        <div class="league-img-wrap">
+          <img class="league-img"
+               src="https://images.unsplash.com/photo-1558981285-6f0c5e7c4ffe?w=700&q=75"
+               alt="Formel 2 Liga"
+               loading="lazy">
+          <div class="league-tier-badge">Tier 3</div>
+        </div>
+        <div class="league-body">
+          <div class="league-name">Formel 2</div>
+          <p class="league-desc">Der perfekte Einstieg. Lerne das Handwerk des Sim Racings in einer freundlichen, sportlichen Atmosphäre.</p>
+          <div class="league-meta">
+            <span class="meta-badge">Einsteiger</span>
+            <span class="meta-badge">F1 Spiel</span>
+          </div>
         </div>
       </div>
 
@@ -529,38 +617,61 @@
   </div>
 </section>
 
+<!-- GALLERY STRIP -->
+<div class="gallery-strip">
+  <div class="gallery-cell">
+    <img class="gallery-img"
+         src="https://images.unsplash.com/photo-1621371841664-baecb8f9ea2f?w=1200&q=75"
+         alt="Racing action">
+  </div>
+  <div class="gallery-cell">
+    <img class="gallery-img"
+         src="https://images.unsplash.com/photo-1612831455459-9b1b2d5daed8?w=600&q=75"
+         alt="Podium">
+  </div>
+  <div class="gallery-cell">
+    <img class="gallery-img"
+         src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75"
+         alt="Sim Cockpit">
+  </div>
+</div>
+
 <!-- ÜBER UNS -->
 <section id="ueber">
   <div class="section-inner">
-    <div class="about-layout">
-      <div class="about-text">
+    <div class="about-split">
+      <div class="about-img-col">
+        <img src="https://images.unsplash.com/photo-1522163723043-478ef79a5bb4?w=900&q=80" alt="Racing community">
+        <div class="about-img-overlay"></div>
+      </div>
+      <div class="about-text-col">
         <div class="section-label">Über uns</div>
         <h2 class="section-title">Mehr als<br><span style="color:var(--cyan)">eine Liga</span></h2>
         <p>Die Mini Racing League wurde 2020 als Discord-basierte F1-Sim-Racing-Community gegründet. Unser Ziel: eine faire, kompetitive und gleichzeitig spaßige Liga für alle Fahrer-Levels.</p>
         <p>Von Kalender-Ankündigungen bis hin zu Live-Kommentaren auf Twitch — wir leben Rennsport. Tritt unserem Discord bei und werde Teil der Familie.</p>
-        <a href="https://discord.gg/mEng68Qekb" class="btn-primary" target="_blank" style="display:inline-block; margin-top:1.5rem;">Community joinen</a>
-      </div>
-      <div class="about-features">
-        <div class="feature-item">
-          <div class="feature-icon">🏆</div>
-          <div class="feature-title">Ranglisten</div>
-          <div class="feature-desc">Fahrer- und Konstrukteurs-WM über die gesamte Saison.</div>
+        <div class="features-grid" style="margin-top:2rem;">
+          <div class="feature-item">
+            <div class="feature-icon">🏆</div>
+            <div class="feature-title">Ranglisten</div>
+            <div class="feature-desc">Fahrer- und Konstrukteurs-WM über die gesamte Saison.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📡</div>
+            <div class="feature-title">Live auf Twitch</div>
+            <div class="feature-desc">Rennen live kommentiert auf Twitch verfolgen.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎬</div>
+            <div class="feature-title">Highlights</div>
+            <div class="feature-desc">Race-Highlights und Best-of auf YouTube.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🤝</div>
+            <div class="feature-title">Community</div>
+            <div class="feature-desc">Aktive Discord-Community mit regelmäßigen Events.</div>
+          </div>
         </div>
-        <div class="feature-item">
-          <div class="feature-icon">📡</div>
-          <div class="feature-title">Live auf Twitch</div>
-          <div class="feature-desc">Rennen live kommentiert auf Twitch verfolgen.</div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">🎬</div>
-          <div class="feature-title">Highlights</div>
-          <div class="feature-desc">Race-Highlights und Best-of auf YouTube.</div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">🤝</div>
-          <div class="feature-title">Community</div>
-          <div class="feature-desc">Aktive Discord-Community mit regelmäßigen Events.</div>
-        </div>
+        <a href="https://discord.gg/mEng68Qekb" class="btn-primary" target="_blank" style="margin-top:2rem;">Community joinen</a>
       </div>
     </div>
   </div>
@@ -619,14 +730,18 @@
 
 <!-- CTA -->
 <div class="cta-footer">
-  <h2 class="cta-title">Bereit für die<br><span>Startaufstellung?</span></h2>
-  <p class="cta-sub">Tritt jetzt dem Discord bei und sichere dir deinen Platz in der nächsten Saison.</p>
-  <a href="https://discord.gg/mEng68Qekb" class="btn-primary" target="_blank">Discord beitreten</a>
+  <div class="cta-bg-img"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <h2 class="cta-title">Bereit für die<br><span>Startaufstellung?</span></h2>
+    <p class="cta-sub">Tritt jetzt dem Discord bei und sichere dir deinen Platz in der nächsten Saison.</p>
+    <a href="https://discord.gg/mEng68Qekb" class="btn-primary" target="_blank">Discord beitreten</a>
+  </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <span>© 2025 Mini Racing League &mdash; Gegründet 2020</span>
+  <span>© 2025 Mini Racing League — Gegründet 2020</span>
   <span style="display:flex;gap:1.5rem;">
     <a href="https://discord.gg/mEng68Qekb" target="_blank">Discord</a>
     <a href="https://www.youtube.com/@MiniRacingLiga" target="_blank">YouTube</a>
